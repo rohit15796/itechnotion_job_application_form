@@ -1,63 +1,72 @@
--- phpMyAdmin SQL Dump
--- version 4.9.0.1
--- https://www.phpmyadmin.net/
---
--- Host: 127.0.0.1
--- Generation Time: Jan 09, 2021 at 08:51 AM
--- Server version: 10.3.16-MariaDB
--- PHP Version: 7.2.20
+<?php
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
-START TRANSACTION;
-SET time_zone = "+00:00";
+	$mysql_host = "localhost";
+	$mysql_username = "root";
+	$mysql_password = "";
+	$mysql_database = "emp_details";
+    
+    $userName = $_POST["user_name"];
+    $userMobileNo = $_POST["user_mobile_no"];
+    $userEmail = $_POST["user_email"];
+    $userAge = $_POST["user_age"];
+    $userExperience = $_POST["user_experience"];
+    $userSkillsArr = $_POST["skills"];
 
+	if (empty($userName)){
+		die("Please enter your name");
+	}
+	if (empty($userEmail) || !filter_var($userEmail, FILTER_VALIDATE_EMAIL)){
+		die("Please enter valid email address");
+	}
+		
+	if (empty($userMobileNo)){
+		die("Please Enter Mobile No");
+    }	
+    if (empty($userAge)){
+		die("Please Enter Your Age");
+    }	
+    if (empty($userExperience)){
+		die("Please Enter Your Experience");
+    }	
+    if (empty($userSkillsArr)){
+		die("Please Select One or Move Skills");
+    }
+    $skillStr = '';	
+    foreach($userSkillsArr as $skill)  
+    {  
+       $skillStr .= $skill."/";  
+    }  
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
+    if ($_FILES["user_resume"]["size"] > 500000) {
 
---
--- Database: `emp_details`
---
+        die("Sorry, your file is too large.");
+      
+    }
+    $target_dir = "/";
+    $target_file = $target_dir . basename($_FILES["user_resume"]["name"]);
+    $fileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+    if($fileType != "pdf" && $fileType != "doc " && $fileType != "docx") {
+        die("Sorry, only Doc, Docx, pdf, and text files are allowed.");
+    }
+    
 
--- --------------------------------------------------------
-
---
--- Table structure for table `users_data`
---
-
-CREATE TABLE `users_data` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `uname` varchar(255) NOT NULL,
-  `mobileno` int(11) NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `age` int(11) NOT NULL,
-  `experience` int(11) NOT NULL,
-  `skills` varchar(255) NOT NULL,
-  `uresume` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Employee Details';
-
---
--- Dumping data for table `users_data`
---
-
-INSERT INTO `users_data` (`id`, `uname`, `mobileno`, `email`, `age`, `experience`, `skills`, `uresume`) VALUES
-(1, 'employee1', 123466789, 'test@gmail.com', 45, 5, 'PHP,CSS', 'test.jpg'),
-(2, 'employee2', 123466789, 'test2@gmail.com', 45, 5, 'PHP,CSS', 'file.jpg');
-
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `users_data`
---
-ALTER TABLE `users_data`
-  ADD PRIMARY KEY (`id`);
-COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+    if (!move_uploaded_file($_FILES["user_resume"]["tmp_name"], $target_file)) {
+        die("Sorry, there was an error uploading your file.");
+     }
+	$mysqli = new mysqli($mysql_host,$mysql_username,$mysql_password,$mysql_database);
+	
+	if ($mysqli->connect_error) {
+		die('Error : ('. $mysqli->connect_errno .') '. $mysqli->connect_error);
+	}	
+	
+	$statement = $mysqli->prepare("INSERT INTO users_data (uname, mobileno, email, age, experience, skills, uresume) VALUES(?,?,?,?,?,?,?)"); 
+	$statement->bind_param($userName, $userMobileNo, $userEmail, $userAge, $userExperience, $skillStr, $target_file); 
+	
+	if($statement->execute()){
+		print "Employee Details save successfully";
+	}else{
+		print $mysqli->error;
+	}
+}
+?>
