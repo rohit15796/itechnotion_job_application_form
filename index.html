@@ -1,0 +1,80 @@
+<html>
+    <head>
+        <title>Employee Form</title>
+    </head>
+    <body>
+        <div>
+            <h2>Employee Form</h2>
+        </div>
+        <div>
+            <form method="post" action="savedetail.php">
+                <div>
+                    <span>
+                        Name:
+                    </span>
+                    <span>
+                        <input type="text" name="user_name" id="user_name" placeholder="Enter Your Name" />
+                    </span>
+                </div>
+                <div>
+                    <span>
+                        Mobile No.:
+                    </span>
+                    <span>
+                        <input type="number" name="user_mobile_no" id="user_mobile_no" placeholder="Enter Your Mobile No" />
+                    </span>
+                </div>
+                <div>
+                    <span>
+                        Email:
+                    </span>
+                    <span>
+                        <input type="email" name="user_email" id="user_email" placeholder="Enter Your Email" />
+                    </span>
+                </div>
+                <div>
+                    <span>
+                        Age:
+                    </span>
+                    <span>
+                        <input type="number" name="user_age" id="user_age" placeholder="Enter Your Age" />
+                    </span>
+                </div>
+                <div>
+                    <span>
+                        Experience (In years):
+                    </span>
+                    <span>
+                        <input type="number" name="user_experience" id="user_experience" placeholder="Enter Your Experience" />
+                    </span>
+                </div>
+                <div>
+                    <span>
+                        Skills:
+                    </span>
+                    <span>
+                        <input type="checkbox" id="skill_php" name="skill_php">
+                        <label for="skill_php"> PHP</label>
+                        <input type="checkbox" id="skill_html" name="skill_php">
+                        <label for="skill_php"> HTML</label>
+                        <input type="checkbox" id="skill_css" name="skill_php">
+                        <label for="skill_php"> CSS</label>
+                    </span>
+                </div>
+                <div>
+                    <span>
+                        Resume:
+                    </span>
+                    <span>
+                        <input type="file" name="user_resume" id="user_resume"/>
+                    </span>
+                </div>
+                <div>
+                    <span>
+                        <input type="submit" name="user_resume" id="submit_btn" placeholder="Submit Form"/>
+                    </span>
+                </div>
+            </form>
+        </div>
+    </body>
+</html>
