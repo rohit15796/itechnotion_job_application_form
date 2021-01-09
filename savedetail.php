@@ -31,20 +31,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }	
     if (empty($userSkillsArr)){
 		die("Please Select One or Move Skills");
-	}	
+    }
+    $skillStr = '';	
     foreach($userSkillsArr as $skill)  
     {  
-       $skillStr .= $skill.",";  
+       $skillStr .= $skill."/";  
     }  
 
-	$mysqli = new mysqli($mysql_host, $mysql_username, $mysql_password, $mysql_database);
+    if ($_FILES["user_resume"]["size"] > 500000) {
+
+        die("Sorry, your file is too large.");
+      
+    }
+    $target_dir = "/";
+    $target_file = $target_dir . basename($_FILES["user_resume"]["name"]);
+    $fileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+    if($fileType != "pdf" && $fileType != "doc " && $fileType != "docx") {
+        die("Sorry, only Doc, Docx, pdf, and text files are allowed.");
+    }
+    
+
+    if (!move_uploaded_file($_FILES["user_resume"]["tmp_name"], $target_file)) {
+        die("Sorry, there was an error uploading your file.");
+     }
+	$mysqli = new mysqli($mysql_host,$mysql_username,$mysql_password,$mysql_database);
 	
 	if ($mysqli->connect_error) {
 		die('Error : ('. $mysqli->connect_errno .') '. $mysqli->connect_error);
 	}	
 	
-	$statement = $mysqli->prepare("INSERT INTO users_data (uname, mobileno, email, age, experience, skills) VALUES(?, ?, ?)"); 
-	$statement->bind_param($userName, $userMobileNo, $userEmail, $userAge, $userExperience, $skillStr); 
+	$statement = $mysqli->prepare("INSERT INTO users_data (uname, mobileno, email, age, experience, skills, uresume) VALUES(?,?,?,?,?,?,?)"); 
+	$statement->bind_param($userName, $userMobileNo, $userEmail, $userAge, $userExperience, $skillStr, $target_file); 
 	
 	if($statement->execute()){
 		print "Employee Details save successfully";
