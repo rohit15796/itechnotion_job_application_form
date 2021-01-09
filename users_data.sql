@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 09, 2021 at 08:30 AM
+-- Generation Time: Jan 09, 2021 at 08:51 AM
 -- Server version: 10.3.16-MariaDB
 -- PHP Version: 7.2.20
 
@@ -36,14 +36,14 @@ CREATE TABLE `users_data` (
   `age` int(11) NOT NULL,
   `experience` int(11) NOT NULL,
   `skills` varchar(255) NOT NULL,
-  `resume` varchar(255) NOT NULL
+  `uresume` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Employee Details';
 
 --
 -- Dumping data for table `users_data`
 --
 
-INSERT INTO `users_data` (`id`, `uname`, `mobileno`, `email`, `age`, `experience`, `skills`, `resume`) VALUES
+INSERT INTO `users_data` (`id`, `uname`, `mobileno`, `email`, `age`, `experience`, `skills`, `uresume`) VALUES
 (1, 'employee1', 123466789, 'test@gmail.com', 45, 5, 'PHP,CSS', 'test.jpg'),
 (2, 'employee2', 123466789, 'test2@gmail.com', 45, 5, 'PHP,CSS', 'file.jpg');
 
